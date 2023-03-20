@@ -1,12 +1,12 @@
 # ESC-Project-
 
-Software Engineering Project 
+Software Engineering Project\
 
-I am planning to work individually as I will be turning this project into a graduation project.
+I am planning to work individually as I will be turning this project into a graduation project.\
 
-Group/Project name: ESC (Epoka Student Community)
-Group members: Klaudia Rapaj
-Leader: Klaudia Rapaj
+Group/Project name: ESC (Epoka Student Community)\
+Group members: Klaudia Rapaj\
+Leader: Klaudia Rapaj\
 
 
 Problem: Students often find it difficult to reach out to each other, especially when they have no contacts with each other. Students of different departments and course programs struggle to find answers to common questions they might have because of inability to spread/communicate this information to others. Therefore, there is a need of a designed community for university's students to use in order to stay connected, help each other, grow network and make the most out of their university days.\
