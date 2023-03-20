@@ -4,6 +4,7 @@ Software Engineering Project
 
 I am planning to work individually as I will be turning this project into a graduation project.
 
+Group/Project name: ESC (Epoka Student Community)
 Group members: Klaudia Rapaj
 Leader: Klaudia Rapaj
 
