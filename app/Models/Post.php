@@ -23,4 +23,26 @@ class Post extends Model
     {
         return $this->hasMany(Like::class);
     }
+
+    public function reports()
+{
+    return $this->hasMany(Report::class);
+}
+
+public function bookmarkedBy()
+{
+    return $this->belongsToMany(User::class, 'bookmarks')->withTimestamps();
+}
+
+public function comments()
+{
+    return $this->hasMany(Comment::class);
+}
+
+public function users()
+{
+    return $this->belongsToMany(User::class, 'bookmarks', 'post_id', 'user_id')->withTimestamps();
+}
+
+
 }

@@ -71,6 +71,12 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id')->withTimestamps();
     }
 
+    public function bookmarks()
+    {
+        return $this->belongsToMany(Post::class, 'bookmarks', 'user_id', 'post_id')->withTimestamps();
+    }
+
+
     // Define the "forums joined" relationship
     public function forumsJoined()
     {
@@ -93,6 +99,17 @@ class User extends Authenticatable
             ->orWhere('user_id', $this->id)
             ->orderByDesc('created_at')
             ->get();
+    }
+
+
+    public function comments()
+{
+    return $this->hasMany(Comment::class);
+}
+
+
+    public function profilefeed(){
+        return $this->hasMany(Post::class)->orderByDesc('created_at');
     }
 
     public function hasRole($role)

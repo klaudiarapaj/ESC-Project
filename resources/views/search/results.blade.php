@@ -8,7 +8,7 @@
     <h3>Users</h3>
     <ul>
         @foreach ($users as $user)
-            @if ($user->id === Auth::id())
+        @if ($user->id === Auth::user()->id)
                 <li><a href="{{ route('profile') }}">{{ $user->name }}</a></li>
             @else
                 <li><a href="{{ route('user.profile', ['user' => $user->name]) }}">{{ $user->name }}</a></li>

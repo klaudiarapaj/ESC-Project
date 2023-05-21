@@ -10,15 +10,18 @@ use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
+   // ProfileController.php
+
    public function show()
-    {
-        $user = Auth::user(); // Retrieve the authenticated user
-       
-        // Pass the user data to the view
-        return view('profile.profile', [
-            'user' => $user
-        ]);
-    } 
+   {
+       $userId = auth()->user()->id;
+       $user = User::findOrFail($userId);
+       $feed = $user->profilefeed;
+   
+       return view('profile.profile', compact('user', 'feed'));
+   }
+
+   
 
     public function update(Request $request)
     {
@@ -66,13 +69,5 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user'));
     }
 
-  /*  public function updateProfileForm()
-    {
-        $user = Auth::user(); // Get the authenticated user
 
-        // Pass the user data to the view
-        return view('updateProfileForm', [
-            'user' => $user
-        ]);
-    } */
 }

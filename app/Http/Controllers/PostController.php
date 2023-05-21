@@ -7,8 +7,6 @@ use App\Models\Post;
 use App\Models\User;
 
 
-
-
 class PostController extends Controller
 {
 
@@ -36,8 +34,26 @@ class PostController extends Controller
     }
 
 
+    public function bookmark(Post $post)
+    {
+        auth()->user()->bookmarks()->attach($post);
+    
+        return redirect()->back()->with('success', 'Post bookmarked successfully!');
+    }
 
+    public function removeBookmark(Post $post)
+{
+    auth()->user()->bookmarks()->detach($post);
 
+    return redirect()->back()->with('success', 'Bookmark removed successfully!');
+}
+
+    public function showBookmarks()
+    {
+        $posts = auth()->user()->bookmarks()->paginate(10);
+    
+        return view('post.bookmarks', compact('posts'));
+    }
 
 
     //for forum posts
@@ -78,17 +94,10 @@ class PostController extends Controller
     {
 
         return view('post.show', [
-            'post' => $post,
+            'post' => $post, 'user' => $post->user,
         ]);
     }
-
-
-
-    public function showuser($user)
-    {
-        $user = User::where('name', $user)->firstOrFail();
-        return view('profile.show', compact('user'));
-    }
+ 
 
 
     //for admin

@@ -12,11 +12,13 @@ class UserController extends Controller
    
   
     public function show($name)
-{
-
-    $user = User::where('name', $name)->firstOrFail();
-    return view('user.profile', compact('user'));
-}
+    {
+        $user = User::where('name', $name)->firstOrFail();
+        $feed = $user->posts()->latest()->get();
+        return view('user.profile', compact('user', 'feed'));
+    }
+    
+    
 
   /*  public function follow(User $user)
 {

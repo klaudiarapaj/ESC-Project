@@ -59,7 +59,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('bookmarks') }}">
                             <i class="bi bi-bookmark"></i> Bookmarks
                         </a>
                     </li>

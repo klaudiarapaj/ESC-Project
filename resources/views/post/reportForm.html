@@ -1,0 +1,29 @@
+@extends('layouts.app')
+
+@section('content')
+
+<div class="container">
+    <!-- Existing code for displaying the reported posts -->
+    <!-- ... -->
+
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">{{ __('Report Form') }}</div>
+                <div class="card-body">
+                    <form id="reportForm">
+                        <!-- Report submission fields go here -->
+                        <input type="radio" name="reportReason" value="spam"> Spam<br>
+                        <input type="radio" name="reportReason" value="inappropriate"> Inappropriate<br>
+                        <input type="radio" name="reportReason" value="other"> Other<br>
+                        <input type="text" id="otherReason" placeholder="Enter the reason">
+
+                        <button type="submit">Submit Report</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection

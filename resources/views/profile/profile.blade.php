@@ -6,6 +6,7 @@
 <html>
 
 <head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous">
 
     <title>My Profile</title>
 
@@ -61,25 +62,73 @@
 
         </div>
 
-        <div class="row justify-content-center mt-3">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header font-weight-bold">
-                        Posts
-                    </div>
-                    <div class="card-body">
-                        @if ($user->posts && $user->posts->count() > 0)
-                        @foreach ($user->posts as $post)
+
+
+        <div class="container" style="margin-top:20px;">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+
+                    @if ($feed && $feed->count() > 0)
+                    @foreach($feed as $post)
+
+                    <a href="{{ route('post.show', ['post' => $post]) }}" class="text-decoration-none">
                         <div class="card mb-3">
-                            <div class="card-header">
-                                <h5 class="card-title">{{ $post->title }}</h5>
-                            </div>
                             <div class="card-body">
-                                <p class="card-text">{{ $post->content }}</p>
+                                <div class="d-flex align-items-start">
+                                    @if(Auth::user()->profile_picture)
+                                    <img class="image rounded-circle mr-3" src="{{ asset('storage/images/'.Auth::user()->profile_picture) }}" alt="profile_image" style="width: 50px; height: 50px;">
+                                    @else
+                                    <img src="{{ asset('storage/pfp/default_pfp.png') }}" class="rounded-circle mr-3" width="50" height="50">
+                                    @endif
+                                    <div>
+                                        @if ($post->user->id == auth()->user()->id)
+                                        <h5 class="mb-0" style="margin-top:15px; margin-left:5px"><a href="{{ route('profile.show', $post->user->name) }}">{{ $post->user->name }}</a></h5>
+                                        @else
+                                        <h5 class="mb-0"><a href="{{ route('profile.show', $post->user->id) }}">{{ $post->user->name }}</a></h5>
+                                        @endif
+                                    </div>
+                                </div>
+                                <p class="card-text" style="font-size: 20px; font-weight: bold; margin-bottom: 0px; text-align:start">{{ $post->title }}</p>
+                                <div class="d-flex align-items-center">
+                                    <div class="text-muted mr-3">{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</div>
+                                    @auth
+                                    @if (auth()->user()->likedPosts->contains($post))
+                                    <form action="{{ route('posts.unlike', $post) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-link text-danger"><i class="fas fa-heart" style="margin-bottom:-20px"></i></button>
+                                    </form>
+                                    @else
+                                    <form action="{{ route('posts.like', $post) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-link text-danger"><i class="far fa-heart" style="margin-bottom:-20px"></i></button>
+                                    </form>
+                                    @endif
+                                    @endauth
+                                    <button class="btn btn-link"><i class="far fa-comment"></i></button>
+                            @auth
+                            @if (auth()->user()->bookmarks->contains($post))
+                            <form action="{{ route('posts.removeBookmark', ['post' => $post]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-link"><i class="fas fa-bookmark" style="margin-bottom:-20px"></i></button>
+                            </form>
+                            @else
+                            <form action="{{ route('posts.bookmark', ['post' => $post]) }}" method="POST">
+                                @csrf
+                                @method('POST')
+                                <button type="submit" class="btn btn-link"><i class="far fa-bookmark" style="margin-bottom:-20px"></i></button>
+                            </form>
+                            @endif
+                            @endauth
+                                </div>
                             </div>
-                            <a href="{{ route('post.show', ['post' => $post]) }}" class="btn btn-primary">View Post</a>
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <a href="{{ route('post.show', ['post' => $post]) }}" class="btn btn-primary btn-sm">View</a>
+                            </div>
+
                         </div>
-                    </div>
+                    </a>
                     @endforeach
                     @else
                     <p>No posts found.</p>
@@ -87,9 +136,11 @@
                 </div>
             </div>
         </div>
-    </div>
+
 
     </div>
+
+
 
 </body>
 

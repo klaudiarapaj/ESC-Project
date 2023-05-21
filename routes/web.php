@@ -23,14 +23,30 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::post('/posts', 'App\Http\Controllers\PostController@create')->name('post.create');
     Route::get('/posts/{post}', 'App\Http\Controllers\PostController@show')->name('post.show');
-    Route::get('/profile/{user}', 'App\Http\Controllers\ProfileController@show')->name('profile.show');
+    Route::get('/profile/{user:name}', 'App\Http\Controllers\ProfileController@show')->name('profile.show');
+
+    //report
+    Route::post('/reports', 'App\Http\Controllers\ReportController@store')->name('reports.store');
+   
+
+    //bookmark
+    Route::post('/posts/{post}/bookmark', 'App\Http\Controllers\PostController@bookmark')->name('posts.bookmark');
+    Route::delete('/posts/{post}/bookmark', 'App\Http\Controllers\PostController@removeBookmark')->name('posts.removeBookmark');
+    Route::get('/bookmarks', 'App\Http\Controllers\PostController@showBookmarks')->name('bookmarks');
 
     //likes
     Route::post('/posts/{post}/like', 'App\Http\Controllers\LikeController@like')->name('posts.like');
     Route::delete('/posts/{post}/unlike', 'App\Http\Controllers\LikeController@like')->name('posts.unlike');
 
 
+    //comment
+    Route::post('/posts/{post}/comment', 'App\Http\Controllers\CommentController@create')->name('comments.create');
+    Route::post('/comments',  'App\Http\Controllers\CommentController@store')->name('comments.store');
+
+    //search
     Route::get('/search', 'App\Http\Controllers\SearchController@search')->name('search');
+
+    //display users profile
     Route::get('/users/{user:name}', 'App\Http\Controllers\UserController@show')->name('user.profile');
 
 
