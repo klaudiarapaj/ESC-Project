@@ -3,11 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\Like;
+use Spatie\Permission\Traits\HasRoles;
+
 
 
 
@@ -15,6 +19,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory;
     use Notifiable;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -26,11 +31,12 @@ class User extends Authenticatable
         'email',
         'password',
         'department',
-        'birthdate', 
+        'birthdate',
         'interests',
         'bio',
         'major',
         'phonenumber',
+        'profile_picture',
     ];
 
     public function posts()
@@ -42,7 +48,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Like::class);
     }
-    
+
     public function likedPosts()
     {
         return $this->belongsToMany(Post::class, 'likes');
@@ -53,19 +59,19 @@ class User extends Authenticatable
         return $this->belongsToMany(Major::class, 'major_user', 'user_id', 'major_id');
     }
 
-     // Define the "following" relationship
-     public function following()
-     {
-         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id')->withTimestamps();
-     }
- 
-     // Define the "followers" relationship
-     public function followers()
-     {
-         return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id')->withTimestamps();
-     }
+    // Define the "following" relationship
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id')->withTimestamps();
+    }
 
-      // Define the "forums joined" relationship
+    // Define the "followers" relationship
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id')->withTimestamps();
+    }
+
+    // Define the "forums joined" relationship
     public function forumsJoined()
     {
         return $this->belongsToMany(Forum::class, 'forum_user', 'user_id', 'forum_id')->withTimestamps();
@@ -75,12 +81,12 @@ class User extends Authenticatable
     {
         // Get the IDs of the users that the current user is following, including their own ID
         $followingIds = $this->following()->pluck('users.id')->push($this->id);
-    
-        
-    
+
+
+
         // Get the IDs of the forums that the current user has joined
         $forumIds = $this->forumsJoined()->pluck('forums.id');
-    
+
         // Get the posts from the users that the current user is following, as well as their own posts, and the posts from the forums they have joined
         return Post::whereIn('user_id', $followingIds)
             ->orWhereIn('forum_id', $forumIds)
@@ -88,7 +94,23 @@ class User extends Authenticatable
             ->orderByDesc('created_at')
             ->get();
     }
-    
+
+    public function hasRole($role)
+    {
+        return $this->roles()->where('name', $role)->exists();
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function isAdmin()
+{
+    return $this->role === 'admin';
+}
+
+
 
     /**
      * The attributes that should be hidden for serialization.

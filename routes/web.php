@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 
+
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('home');
@@ -15,16 +16,33 @@ Route::get('/', function () {
 Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
-    Route::post('/profile/update', 'App\Http\Controllers\ProfileController@updateProfile')->name('updateProfile');
+    Route::get('/profile/edit', 'App\Http\Controllers\ProfileController@edit')->name('profile.edit');
+    Route::post('/profile/update', 'App\Http\Controllers\ProfileController@update')->name('profile.update');
+    Route::post('/users/{user}/follow', 'App\Http\Controllers\UserController@follow')->name('follow');
 
-    // Route::post('/posts', [App\Http\Controllers\PostController::class, 'create'])->name('post.create');
+
     Route::post('/posts', 'App\Http\Controllers\PostController@create')->name('post.create');
     Route::get('/posts/{post}', 'App\Http\Controllers\PostController@show')->name('post.show');
     Route::get('/profile/{user}', 'App\Http\Controllers\ProfileController@show')->name('profile.show');
 
     //likes
     Route::post('/posts/{post}/like', 'App\Http\Controllers\LikeController@like')->name('posts.like');
-    Route::delete('/posts/{post}/unlike', 'App\Http\Controllers\LikeController@like' )->name('posts.unlike');
+    Route::delete('/posts/{post}/unlike', 'App\Http\Controllers\LikeController@like')->name('posts.unlike');
+
+
+    Route::get('/search', 'App\Http\Controllers\SearchController@search')->name('search');
+    Route::get('/users/{user:name}', 'App\Http\Controllers\UserController@show')->name('user.profile');
+
+
+   
+    Route::get('/forums/{name}', 'App\Http\Controllers\ForumController@show')->name('forums.show');
+    Route::post('/forums/{forum}/join', 'App\Http\Controllers\ForumController@join')->name('forums.join');
+    Route::post('/forum/post', 'App\Http\Controllers\PostController@store')->name('post.store');
+
+
+
+
+
 
 
     Route::post('/post', function () {
@@ -38,6 +56,25 @@ Route::group(['middleware' => ['guest']], function () {
     Route::post('/login', 'Auth\LoginController@login');
     Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 });
+
+Route::group(['middleware' => ['auth', 'isAdmin']], function () {
+    Route::get('/', 'App\Http\Controllers\AdminPageController@index')->name('admin.index');
+    Route::get('/forums', 'App\Http\Controllers\ForumController@index')->name('admin.forums');
+    Route::get('/forums/create', 'App\Http\Controllers\ForumController@create')->name('forums.create');
+    Route::post('/forums/store', 'App\Http\Controllers\ForumController@store')->name('forums.store');
+    Route::get('/forums/{forum}/edit', 'App\Http\Controllers\ForumController@edit')->name('forums.edit');
+    Route::put('/forums/{forum}/update', 'App\Http\Controllers\ForumController@update')->name('forums.update');
+    Route::delete('/forums/{forum}/delete', 'App\Http\Controllers\ForumController@delete')->name('forums.delete');
+    Route::get('/users', 'App\Http\Controllers\UserController@index')->name('admin.users');
+    Route::delete('/users/{user}/delete', 'App\Http\Controllers\UserController@delete')->name('users.delete');
+    Route::get('/posts', 'App\Http\Controllers\PostController@index')->name('admin.posts');
+    Route::delete('/posts/{post}/delete', 'App\Http\Controllers\PostController@delete')->name('posts.delete');
+
+    /*
+    Route::delete('/posts/{id}/delete', 'AdminPageController@deletePost')->name('admin.deletePost');
+    Route::delete('/forums/{id}/delete', 'AdminPageController@deleteForum')->name('admin.deleteForum');*/
+});
+
 
 // Authentication routes
 Auth::routes(['verify' => true]);

@@ -17,37 +17,43 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
-                        <img src="{{ asset($user->profile_picture) }}" class="rounded-circle mr-3" width="100" height="100">
+                        @if(Auth::user()->profile_picture)
+                        <img class="image rounded-circle" src="{{ asset('storage/images/'.Auth::user()->profile_picture) }}" alt="profile_image" style="width: 100px; height: 100px;  ">
+                        @else
+                        <img src="{{ asset('storage/pfp/default_pfp.png') }}" class="rounded-circle mr-3" width="100" height="100">
+                        @endif
+
                         <h4 class="mb-0 mr-3">{{ $user->name }}</h4>
                         <div class="ml-auto">
-                            <a href="{{ route('updateProfile') }}" class="btn btn-primary">Edit Profile</a>
+                            <a href="{{ route('profile.edit') }}" class="btn btn-primary">Edit Profile</a>
                         </div>
                     </div>
 
                     @if ($user->bio)
                     <div class="row">
-                        <div class="col-md-4 font-weight-bold">Bio:</div>
+                        <div class="col-md-4 font-weight-bold">Bio</div>
                         <div class="col-md-8">{{ $user->bio }}</div>
                     </div>
                     @endif
                     @if ($user->interests)
                     <div class="row">
-                        <div class="col-md-4 font-weight-bold">Interests:</div>
+                        <div class="col-md-4 font-weight-bold">Interests</div>
                         <div class="col-md-8">{{ $user->interests }}</div>
                     </div>
                     @endif
                     @if ($user->department)
                     <div class="row">
-                        <div class="col-md-4 font-weight-bold">Department:</div>
+                        <div class="col-md-4 font-weight-bold">Department</div>
                         <div class="col-md-8">{{ $user->department }}</div>
                     </div>
                     @endif
                     @if ($user->major)
                     <div class="row">
-                        <div class="col-md-4 font-weight-bold">Major:</div>
+                        <div class="col-md-4 font-weight-bold">Major</div>
                         <div class="col-md-8">{{ $user->major }}</div>
                     </div>
                     @endif
+
 
 
                 </div>
@@ -72,16 +78,16 @@
                                 <p class="card-text">{{ $post->content }}</p>
                             </div>
                             <a href="{{ route('post.show', ['post' => $post]) }}" class="btn btn-primary">View Post</a>
-                    </div>
                         </div>
-                        @endforeach
-                        @else
-                        <p>No posts found.</p>
-                        @endif
                     </div>
+                    @endforeach
+                    @else
+                    <p>No posts found.</p>
+                    @endif
                 </div>
             </div>
         </div>
+    </div>
 
     </div>
 
@@ -89,7 +95,6 @@
 
 </html>
 @endsection
-
 <style>
     .card-header {
         border-bottom: 1px solid #e6ecf0;

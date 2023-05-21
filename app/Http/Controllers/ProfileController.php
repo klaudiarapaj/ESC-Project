@@ -7,22 +7,25 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 
+
 class ProfileController extends Controller
 {
-    public function show()
+   public function show()
     {
         $user = Auth::user(); // Retrieve the authenticated user
        
         // Pass the user data to the view
-        return view('profile', [
+        return view('profile.profile', [
             'user' => $user
         ]);
-    }
+    } 
 
-    public function updateProfile(Request $request)
+    public function update(Request $request)
     {
      //  $user = Auth::user(); // Get the authenticated user
      $user = User::find(auth()->id());
+
+
         $request->validate([
             'name' => 'required|string|max:255',
             'department' => 'required|string|max:255',
@@ -31,6 +34,7 @@ class ProfileController extends Controller
             'bio' => 'nullable|string|max:255',
             'major' => 'nullable|string|max:255',
             'phonenumber' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         // Update the user's information with the form data
@@ -41,6 +45,14 @@ class ProfileController extends Controller
         $user->major = $request->input('major');
         $user->phonenumber = $request->input('phonenumber');
         
+        if ($request->hasFile('image')) {
+            $filename = $request->image->getClientOriginalName();
+            $request->image->storeAs('images', $filename, 'public');
+            $user = Auth::user();
+            $user->profile_picture = $filename;
+        }
+        
+        
         // Save the changes to the database
         $user->save();
         
@@ -48,17 +60,13 @@ class ProfileController extends Controller
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
 
-    public function editProfile()
+    public function edit()
     {
-        $user = Auth::user(); // Get the authenticated user
-
-        // Pass the user data to the view
-        return view('editProfile', [
-            'user' => $user
-        ]);
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
     }
 
-    public function updateProfileForm()
+  /*  public function updateProfileForm()
     {
         $user = Auth::user(); // Get the authenticated user
 
@@ -66,5 +74,5 @@ class ProfileController extends Controller
         return view('updateProfileForm', [
             'user' => $user
         ]);
-    }
+    } */
 }

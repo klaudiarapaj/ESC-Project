@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Edit Profile') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('updateProfile') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <div class="form-group row">
@@ -44,7 +44,7 @@
                             <label for="department" class="col-md-4 col-form-label text-md-right">{{ __('Department') }}</label>
 
                             <div class="col-md-6">
-                                <input id="department" type="text" class="form-control @error('department') is-invalid @enderror" name="department" value="{{ old('department', $user->department) }}" required autocomplete="department">
+                                <input id="department" type="text" class="form-control @error('department') is-invalid @enderror" name="department" value="{{ old('department', $user->department) }}" autocomplete="department">
 
                                 @error('department')
                                 <span class="invalid-feedback" role="alert">
@@ -58,7 +58,7 @@
                             <label for="birthdate" class="col-md-4 col-form-label text-md-right">{{ __('Birthdate') }}</label>
 
                             <div class="col-md-6">
-                                <input id="birthdate" type="date" class="form-control @error('birthdate') is-invalid @enderror" name="birthdate" value="{{ old('birthdate', $user->birthdate) }}" required autocomplete="birthdate">
+                                <input id="birthdate" type="date" class="form-control @error('birthdate') is-invalid @enderror" name="birthdate" value="{{ old('birthdate', $user->birthdate) }}" autocomplete="birthdate">
 
                                 @error('birthdate')
                                 <span class="invalid-feedback" role="alert">
@@ -102,17 +102,16 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="profile_picture" class="col-md-4 col-form-label text-md-right">{{ __('Profile Picture') }}</label>
+                            <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Profile Picture') }}</label>
 
                             <div class="col-md-6">
-                                <input id="profile_picture" type="file" class="form-control @error('profile_picture') is-invalid @enderror" name="profile_picture" value="{{ old('profile_picture', $user->profile_picture) }}" autocomplete="profile_picture">
+                                <input id="image" type="file" class="form-control @error('image') is-invalid @enderror" name="image" >
 
-                                @error('profile_picture')
+                                @error('image')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
-
                             </div>
 
                         </div>
@@ -148,7 +147,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button id="editProfile" type="submit" class="btn btn-primary">
-                                    {{ __('Edit Profile') }}
+                                    {{ __('Update') }}
                                 </button>
                             </div>
 

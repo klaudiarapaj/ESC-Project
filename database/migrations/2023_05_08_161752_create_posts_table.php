@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->dateTime('date');
-            $table->json('tags')->nullable();
             $table->timestamps();
         });
     }

@@ -15,16 +15,18 @@ class Forum extends Model
         'description',
         'user_joined',
     ];
+   
 
     public function posts()
     {
         return $this->hasMany(Post::class);
     }
 
-    public function users()
+    public function members()
     {
         return $this->belongsToMany(User::class, 'forum_user', 'forum_id', 'user_id')->withTimestamps();
     }
+    
 
     public function incrementUserJoinedCount()
     {

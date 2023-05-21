@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,26 +17,31 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
+
 <body>
-<div id="app">
-  
+    <div id="app">
+
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     ESC
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-@auth
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <form class="d-flex ms-auto">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                @auth
+                <form action="{{ route('search') }}" method="GET">
+                    <div class="d-flex ms-auto">
+                        <input class="form-control me-2" type="text" class="form-control" placeholder="Search" name="query">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit">Search</button>
+                        </div>
+                    </div>
                 </form>
 
-                   <!-- Middle of Navbar -->
-                 
+
+                <!-- Middle of Navbar -->
+
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('home') }}">
@@ -58,7 +64,7 @@
                         </a>
                     </li>
                 </ul>
-@endauth
+                @endauth
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
                     <!-- Profile Dropdown -->
@@ -69,14 +75,18 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ route('profile') }}">Profile</a>
+                            <a class="dropdown-item" href="{{ route('profile') }}">Profile</a>
+
+                            @if (Auth::user()->isAdmin())
+                            <a class="dropdown-item" href="{{ route('admin.index') }}">Admin</a>
+                            @endif
 
                             <a class="dropdown-item" href="#">
                                 Settings
                             </a>
+
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
+                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
@@ -88,21 +98,21 @@
                     </li>
 
                     @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Log in') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endauth
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">{{ __('Log in') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                    </li>
+                    @endauth
                 </ul>
             </div>
-        </div>
+    </div>
     </nav>
     <main class="py-4">
         @yield('content')
     </main>
     </div>
 </body>
-</html>
 
+</html>
