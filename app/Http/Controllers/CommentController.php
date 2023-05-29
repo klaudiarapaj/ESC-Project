@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -21,24 +23,21 @@ class CommentController extends Controller
 
         $post->comments()->save($comment);
 
+        $user = auth()->user();
+        // Create notification for the user being commented on
+        if ($post->user_id !== $user->id) {
+            Notification::create([
+                'type' => 'comment',
+                'notifiable_type' => User::class,
+                'notifiable_id' => $post->user_id,
+                'data' => json_encode([
+                    'commented_by' => $user->name,
+                    'post_id' => $post->id,
+                ]),
+            ]);
+        }
+
         return redirect()->back();
     }
 
-    public function store(Request $request)
-    {
-        // Validate the comment data
-        $validatedData = $request->validate([
-            'post_id' => 'required|exists:posts,id',
-            'content' => 'required|string|max:255',
-        ]);
-    
-        // Create the comment
-        $comment = new Comment();
-        $comment->post_id = $validatedData['post_id'];
-        $comment->user_id = auth()->user()->id;
-        $comment->content = $validatedData['content'];
-        $comment->save();
-    
-        return redirect()->back()->with('success', 'Comment added successfully!');
-    }
 }

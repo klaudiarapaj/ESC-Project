@@ -8,11 +8,14 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'ESC') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+  
+   
+
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -39,28 +42,23 @@
                     </div>
                 </form>
 
-
                 <!-- Middle of Navbar -->
 
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('home') }}">
-                            <i class="bi bi-house"></i> Home
+                        <i class="fas fa-home"></i> Home
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-bell"></i> Notifications
+                        <a class="nav-link" href="{{ route('notifications.index') }}">
+                        <i class="fas fa-bell"></i> Notifications
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-envelope"></i> Messages
-                        </a>
-                    </li>
+                  
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('bookmarks') }}">
-                            <i class="bi bi-bookmark"></i> Bookmarks
+                        <i class="fas fa-bookmark"></i> Bookmarks
                         </a>
                     </li>
                 </ul>
@@ -71,7 +69,7 @@
                     <li class="nav-item dropdown">
                         @auth
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            <i class="bi bi-person"></i> {{ Auth::user()->name }}
+                        <i class="fas fa-user"></i> {{ Auth::user()->name }}
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -80,10 +78,6 @@
                             @if (Auth::user()->isAdmin())
                             <a class="dropdown-item" href="{{ route('admin.index') }}">Admin</a>
                             @endif
-
-                            <a class="dropdown-item" href="#">
-                                Settings
-                            </a>
 
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -107,12 +101,19 @@
                     @endauth
                 </ul>
             </div>
+
+        </nav>
+
+        <main class="py-4">
+            @yield('content')
+        </main>
     </div>
-    </nav>
-    <main class="py-4">
-        @yield('content')
-    </main>
-    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+
+
 </body>
 
 </html>

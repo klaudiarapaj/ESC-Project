@@ -54,22 +54,23 @@ class User extends Authenticatable
         return $this->belongsToMany(Post::class, 'likes');
     }
 
-    public function joinMajors()
-    {
-        return $this->belongsToMany(Major::class, 'major_user', 'user_id', 'major_id');
-    }
+  
 
-    // Define the "following" relationship
-    public function following()
-    {
-        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id')->withTimestamps();
-    }
-
-    // Define the "followers" relationship
     public function followers()
     {
-        return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id');
     }
+    
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id');
+    }
+    
+    public function isFollowing($userId)
+    {
+        return $this->following->contains($userId);
+    }
+    
 
     public function bookmarks()
     {
@@ -78,7 +79,7 @@ class User extends Authenticatable
 
 
     // Define the "forums joined" relationship
-    public function forumsJoined()
+    public function forums()
     {
         return $this->belongsToMany(Forum::class, 'forum_user', 'user_id', 'forum_id')->withTimestamps();
     }
@@ -126,6 +127,17 @@ class User extends Authenticatable
 {
     return $this->role === 'admin';
 }
+
+public function notifications()
+{
+    return $this->morphMany(Notification::class, 'notifiable')
+        ->orderBy('created_at', 'desc');
+}
+
+public function forumsJoined(){
+    return $this->belongsToMany(Forum::class, 'forum_user', 'user_id', 'forum_id')->withTimestamps();
+}
+
 
 
 

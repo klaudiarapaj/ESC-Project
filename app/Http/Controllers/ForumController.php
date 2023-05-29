@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Forum;
 use App\Models\User;
+use Illuminate\Support\Facades\View;
 
 
 
@@ -75,12 +76,15 @@ class ForumController extends Controller
 
     public function show($name)
     {
-        $forum = Forum::where('name', $name)->firstOrFail();
-        
-        // Retrieve the forum with its members and posts
-        $forum->load('members', 'posts');
-        
-        return view('forums.show', compact('forum'));
+        // Find the forum by name
+    $forum = Forum::where('name', $name)->firstOrFail();
+
+    // Get the authenticated user
+    $user = auth()->user();
+
+   
+    // Pass the forum and user to the view
+    return view('forums.show', compact('forum', 'user'));
     }
     
     
@@ -93,30 +97,39 @@ class ForumController extends Controller
         return view('forums.show', compact('forum', 'canJoin'));
     }*/
 
-    public function join($name)
-{
-
-    $forum = Forum::where('name', $name)->firstOrFail();
-    // Retrieve the forum based on the ID or name
+    public function join($id)
+    {
+        // Get the authenticated user
+        $user = auth()->user();
     
+        // Find the forum by ID
+        $forum = Forum::findOrFail($id);
     
-    // Implement your logic for joining the forum
-    // For example, you can add the authenticated user as a member of the forum
-    $user = auth()->user();
-    $forum->members()->attach($user);
+        // Check if the user is already a member of the forum
+        if ($user->forums->contains($forum)) {
+            // User is already a member, handle it accordingly (e.g., show a message)
+            return redirect()->back()->with('message', 'You are already a member of this forum.');
+        }
     
-    // Redirect the user to the forum's page or display a success message
-    return redirect()->route('forums.show', ['forum' => $forum]);
-}
+        // Attach the forum to the user's forums (assuming you have a many-to-many relationship)
+        $user->forums()->attach($forum);
+    
+        // Redirect to the forum page or any other desired location
+        return redirect()->back()->with('message', 'You have joined the forum successfully.');
+    }
+    
 
 
     public function leave(Forum $forum)
     {
-        $user = User::find(auth()->id());
-        $user->forumsJoined()->detach($forum);
-        $forum->user_joined--;
-        $forum->save();
+        // Get the authenticated user
+        $user = auth()->user();
+    
+        // Detach the user from the forum's members
+        $forum->members()->detach($user);
 
-        return redirect()->route('forums.show', ['forum' => $forum]);
+        // Redirect back to the forum or any other appropriate page
+        return redirect()->route('forums.show', ['name' => $forum->name]);
+        
     }
-}
+}    

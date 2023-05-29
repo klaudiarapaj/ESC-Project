@@ -2,6 +2,11 @@
 
 @section('content')
 
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous">
+</head>
+<body>
+    
 <h2>Search Results</h2>
 
 @if ($users->isNotEmpty())
@@ -45,4 +50,6 @@
 @if ($users->isEmpty() && $forums->isEmpty() && $posts->isEmpty())
     <p>No results</p>
 @endif
+
+</body>
 @endsection

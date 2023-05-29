@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-
+@php
+use App\Models\Forum;
+@endphp
 <!DOCTYPE html>
 <html>
 
@@ -64,9 +66,11 @@
 
 
 
-        <div class="container" style="margin-top:20px;">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
+        <div class="row justify-content-center mt-3">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Latest Posts</div>
+                <div class="card-body">
 
                     @if ($feed && $feed->count() > 0)
                     @foreach($feed as $post)
@@ -82,10 +86,18 @@
                                     @endif
                                     <div>
                                         @if ($post->user->id == auth()->user()->id)
-                                        <h5 class="mb-0" style="margin-top:15px; margin-left:5px"><a href="{{ route('profile.show', $post->user->name) }}">{{ $post->user->name }}</a></h5>
+                                        <h5 class="mb-0" style="margin-top:15px; margin-left:5px ;text-align:left;"><a href="{{ route('profile.show', $post->user->name) }}">{{ $post->user->name }}</a></h5>
                                         @else
                                         <h5 class="mb-0"><a href="{{ route('profile.show', $post->user->id) }}">{{ $post->user->name }}</a></h5>
                                         @endif
+                                        @if ($post->forum_id)
+                                    <p class="mb-0" style="font-size: 12px; margin-left:5px;">
+                                        @php
+                                        $forum = Forum::find($post->forum_id);
+                                        @endphp
+                                        <a href="{{ route('forums.show', ['name' => $forum->name]) }}"> Part of {{ $forum->name }} Forum </a>
+                                    </p>
+                                    @endif
                                     </div>
                                 </div>
                                 <p class="card-text" style="font-size: 20px; font-weight: bold; margin-bottom: 0px; text-align:start">{{ $post->title }}</p>

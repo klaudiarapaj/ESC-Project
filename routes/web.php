@@ -24,10 +24,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/posts', 'App\Http\Controllers\PostController@create')->name('post.create');
     Route::get('/posts/{post}', 'App\Http\Controllers\PostController@show')->name('post.show');
     Route::get('/profile/{user:name}', 'App\Http\Controllers\ProfileController@show')->name('profile.show');
+    Route::post('/posts/{post}/delete', 'App\Http\Controllers\PostController@deletePost')->name('post.delete');
 
     //report
     Route::post('/reports', 'App\Http\Controllers\ReportController@store')->name('reports.store');
-   
+
 
     //bookmark
     Route::post('/posts/{post}/bookmark', 'App\Http\Controllers\PostController@bookmark')->name('posts.bookmark');
@@ -41,7 +42,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     //comment
     Route::post('/posts/{post}/comment', 'App\Http\Controllers\CommentController@create')->name('comments.create');
-    Route::post('/comments',  'App\Http\Controllers\CommentController@store')->name('comments.store');
+   // Route::post('/comments',  'App\Http\Controllers\CommentController@store')->name('comments.store');
 
     //search
     Route::get('/search', 'App\Http\Controllers\SearchController@search')->name('search');
@@ -50,15 +51,20 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/users/{user:name}', 'App\Http\Controllers\UserController@show')->name('user.profile');
 
 
-   
+    //forums
     Route::get('/forums/{name}', 'App\Http\Controllers\ForumController@show')->name('forums.show');
     Route::post('/forums/{forum}/join', 'App\Http\Controllers\ForumController@join')->name('forums.join');
+    Route::delete('/forums/{forum}/leave', 'App\Http\Controllers\ForumController@leave')->name('forums.leave');
     Route::post('/forum/post', 'App\Http\Controllers\PostController@store')->name('post.store');
 
+    //follow
+    Route::post('/users/{user}/follow', 'App\Http\Controllers\FollowController@store')->name('follow');
+    Route::post('/users/{user}/unfollow', 'App\Http\Controllers\FollowController@destroy')->name('unfollow');
 
 
-
-
+    //notifications
+    Route::get('/notifications', 'App\Http\Controllers\NotificationController@index')->name('notifications.index');
+    Route::post('/notifications/mark-as-read', 'App\Http\Controllers\NotificationController@markAsRead')->name('notifications.markAsRead');
 
 
     Route::post('/post', function () {
@@ -83,6 +89,8 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
     Route::delete('/forums/{forum}/delete', 'App\Http\Controllers\ForumController@delete')->name('forums.delete');
     Route::get('/users', 'App\Http\Controllers\UserController@index')->name('admin.users');
     Route::delete('/users/{user}/delete', 'App\Http\Controllers\UserController@delete')->name('users.delete');
+    Route::post('/{user}/update-role', 'App\Http\Controllers\UserController@updateRole')->name('users.updateRole');
+    Route::get('/users/search', 'App\Http\Controllers\UserController@search')->name('users.search');
     Route::get('/posts', 'App\Http\Controllers\PostController@index')->name('admin.posts');
     Route::delete('/posts/{post}/delete', 'App\Http\Controllers\PostController@delete')->name('posts.delete');
 

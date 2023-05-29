@@ -26,7 +26,7 @@ class PostController extends Controller
         $post = $user->posts()->create([
             'title' => $validatedData['title'],
             'content' => $validatedData['content'],
-            'forum_id' => $request->input('forum_id'),
+           
         ]);
 
         // Redirect to the post's page
@@ -97,7 +97,16 @@ class PostController extends Controller
             'post' => $post, 'user' => $post->user,
         ]);
     }
- 
+   
+
+    public function deletePost(Post $post)
+    {
+        $post->delete();
+
+        
+        return redirect()->route('profile', ['user' => auth()->user()]);
+       
+    }
 
 
     //for admin

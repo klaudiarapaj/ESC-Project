@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous">
 
+</head>
+<body>
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
@@ -36,5 +40,5 @@
         </div>
     </div>
 </div>
-
+</body>
 @endsection
