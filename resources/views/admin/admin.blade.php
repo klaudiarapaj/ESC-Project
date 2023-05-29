@@ -17,7 +17,7 @@
                         <a href="{{route ('admin.forums') }}" class="list-group-item list-group-item-action">Forums</a>
                         <a href="{{route ('admin.users') }}" class="list-group-item list-group-item-action">Users</a>
                         <a href="{{route ('admin.posts') }}" class="list-group-item list-group-item-action">Posts</a>
-                        <a href="#" class="list-group-item list-group-item-action">Feedback</a>
+                        <a href="{{route ('admin.feedbacks') }}" class="list-group-item list-group-item-action">Feedback</a>
                     </div>
                 </div>
             </div>

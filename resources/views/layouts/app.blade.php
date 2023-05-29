@@ -61,6 +61,11 @@
                         <i class="fas fa-bookmark"></i> Bookmarks
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('feedback') }}">
+                        <i class="fas fa-comment"></i> Feedback
+                        </a>
                 </ul>
                 @endauth
                 <!-- Right Side Of Navbar -->

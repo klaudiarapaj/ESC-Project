@@ -24,10 +24,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/posts', 'App\Http\Controllers\PostController@create')->name('post.create');
     Route::get('/posts/{post}', 'App\Http\Controllers\PostController@show')->name('post.show');
     Route::get('/profile/{user:name}', 'App\Http\Controllers\ProfileController@show')->name('profile.show');
-    Route::post('/posts/{post}/delete', 'App\Http\Controllers\PostController@deletePost')->name('post.delete');
-
-    //report
-    Route::post('/reports', 'App\Http\Controllers\ReportController@store')->name('reports.store');
+    Route::delete('/post/{post}/delete', 'App\Http\Controllers\PostController@deletePost')->name('post.delete');
 
 
     //bookmark
@@ -50,6 +47,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     //display users profile
     Route::get('/users/{user:name}', 'App\Http\Controllers\UserController@show')->name('user.profile');
 
+    //report
+    Route::get('posts/{post}/report', 'App\Http\Controllers\PostController@report')->name('post.report');
+    Route::delete('/report/clear/{id}', 'App\Http\Controllers\PostController@clear')->name('report.clear');
+
 
     //forums
     Route::get('/forums/{name}', 'App\Http\Controllers\ForumController@show')->name('forums.show');
@@ -65,6 +66,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     //notifications
     Route::get('/notifications', 'App\Http\Controllers\NotificationController@index')->name('notifications.index');
     Route::post('/notifications/mark-as-read', 'App\Http\Controllers\NotificationController@markAsRead')->name('notifications.markAsRead');
+
+    //feedback
+    Route::get('/feedback', 'App\Http\Controllers\FeedbackController@index')->name('feedback');
+    Route::post('/feedback/store', 'App\Http\Controllers\FeedbackController@store')->name('feedback.store');
+    
 
 
     Route::post('/post', function () {
@@ -91,12 +97,11 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
     Route::delete('/users/{user}/delete', 'App\Http\Controllers\UserController@delete')->name('users.delete');
     Route::post('/{user}/update-role', 'App\Http\Controllers\UserController@updateRole')->name('users.updateRole');
     Route::get('/users/search', 'App\Http\Controllers\UserController@search')->name('users.search');
-    Route::get('/posts', 'App\Http\Controllers\PostController@index')->name('admin.posts');
+    Route::get('/posts', 'App\Http\Controllers\PostController@showReportedPosts')->name('admin.posts');
     Route::delete('/posts/{post}/delete', 'App\Http\Controllers\PostController@delete')->name('posts.delete');
+    Route::get('/feedbacks', 'App\Http\Controllers\FeedbackController@showFeedbacks')->name('admin.feedbacks');
+    Route::delete('/feedback/{id}', 'App\Http\Controllers\FeedbackController@destroy')->name('feedback.delete');
 
-    /*
-    Route::delete('/posts/{id}/delete', 'AdminPageController@deletePost')->name('admin.deletePost');
-    Route::delete('/forums/{id}/delete', 'AdminPageController@deleteForum')->name('admin.deleteForum');*/
 });
 
 

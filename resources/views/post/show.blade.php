@@ -5,153 +5,11 @@
 use App\Models\Forum;
 @endphp
 
-<html>
-
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous">
-    <component is="style" scoped>
-        /* Modal styling */
-        .modal {
-        display: none;
-        /* Hide the modal by default */
-        position: fixed;
-        /* Stay in place */
-        z-index: 1;
-        /* Sit on top */
-        padding-top: 100px;
-        /* Location of the modal */
-        left: 0;
-        top: 0;
-        width: 100%;
-        /* Full width */
-        height: 100%;
-        /* Full height */
-        overflow: auto;
-        /* Enable scroll if needed */
-        background-color: rgb(0, 0, 0);
-        /* Fallback color */
-        background-color: rgba(0, 0, 0, 0.4);
-        /* Black w/ opacity */
-        }
 
-        .modal-content {
-        background-color: #fefefe;
-        margin: auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 400px;
-        }
-
-        .modal-close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-        }
-
-        .modal-close:hover,
-        .modal-close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-        }
-
-        .card-header img {
-        object-fit: cover;
-        }
-
-        .card-header h5 {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 0;
-        }
-
-        .card-body h2 {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-        }
-
-        .card-footer ul li {
-        font-size: 0.9rem;
-        margin-right: 0.5rem;
-        }
-
-        .go-back-button {
-        background-color: #d1e0ee;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        font-size: 16px;
-        position: relative;
-        }
-
-        .go-back-button::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 10px;
-        transform: translateY(-50%);
-        width: 0;
-        height: 0;
-        border-top: 6px solid transparent;
-        border-bottom: 6px solid transparent;
-        border-right: 6px solid #333;
-        }
-
-        .go-back-button:hover {
-        background-color: #245697;
-        }
-
-        .go-back-button:hover::before {
-        border-right-color: #555;
-        }
-
-        .comments-section {
-        margin-top: 10px;
-        }
-
-        .comments-section h3 {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        }
-
-        .comment {
-        margin-bottom: 15px;
-        display: flex;
-        align-items: flex-start;
-        }
-
-        .profile-picture {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
-        }
-
-        .comment .comment-user {
-        display: flex;
-        align-items: center;
-        }
-
-        .comment .comment-author {
-        font-size: 14px;
-        font-weight: bold;
-        color: #657786;
-        margin-bottom: 5px;
-        }
-
-        .comment .comment-content {
-        margin-bottom: 5px;
-        }
-    </component>
 </head>
-
 <body>
-
     <div class="container">
         <div class="row justify-content-center mb-3">
             <button onclick="goBack()" class="go-back-button"> Go Back</button>
@@ -181,26 +39,27 @@ use App\Models\Forum;
                         </p>
                         @endif
 
-                        <div class="text-muted mr-3" style="margin-left: auto;">{{ $post->created_at->diffForHumans() }}</div>
+                        <div class="text-muted mr-3" style="margin-left: auto; margin-right:10px">{{ $post->created_at->diffForHumans() }}</div>
 
 
                         <div class="dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre> </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <!-- Show "Report" option to non-authenticated user -->
-                             
+
                                 @if (Auth::user()->id != $post->user->id)
-                                <a class="dropdown-item" href="#">Report</a>
+                                <a class="dropdown-item" href="{{ route('post.report', ['post' => $post->id]) }}">Report</a>
+
                                 <!-- Show "Delete" option to authenticated user -->
                                 @elseif (Auth::user()->id == $post->user->id)
-                                <a class="dropdown-item" href="{{ route('post.delete', ['post' => $post->id]) }}" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $post->id }}').submit();">
+                                <a class="dropdown-item" href="{{ route('post.delete', ['post' => $post->id]) }}" onclick="event.preventDefault(); if (confirm('Are you sure you want to delete this post?')) { document.getElementById('delete-post-form').submit(); }">
                                     Delete
                                 </a>
-                                <!-- Form for deleting the post -->
-                                <form id="delete-form-{{ $post->id }}" action="{{ route('post.delete', ['post' => $post->id]) }}" method="POST" style="display: none;">
+                                <form id="delete-post-form" action="{{ route('post.delete', ['post' => $post->id]) }}" method="POST" style="display: none;">
                                     @csrf
                                     @method('DELETE')
                                 </form>
+
                                 @endif
                             </div>
                         </div>
@@ -212,7 +71,7 @@ use App\Models\Forum;
                         <h2 class="card-title">{{ $post->title }}</h2>
                         <p class="card-text">{{ $post->content }}</p>
                     </div>
-                    <div class="card-footer d-flex justify-content-between align-items-center">
+                    <div class="card-footer d-flex justify-content-between align-items-center" style="padding:0px 15px">
 
                         <div class="d-flex align-items-center">
                             <div class="text-muted mr-3">{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</div>
@@ -221,12 +80,12 @@ use App\Models\Forum;
                             <form action="{{ route('posts.unlike', $post) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-link text-danger"><i class="fas fa-heart"></i></button>
+                                <button type="submit" class="btn btn-link text-danger" style="margin-top:13px"><i class="fas fa-heart"></i></button>
                             </form>
                             @else
                             <form action="{{ route('posts.like', $post) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-link text-danger"><i class="far fa-heart"></i></button>
+                                <button type="submit" class="btn btn-link text-danger" style="margin-top:13px"><i class="far fa-heart"></i></button>
                             </form>
                             @endif
                             @endauth
@@ -236,19 +95,18 @@ use App\Models\Forum;
                             <form action="{{ route('posts.removeBookmark', ['post' => $post]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-link"><i class="fas fa-bookmark"></i></button>
+                                <button type="submit" class="btn btn-link" style="margin-top:15px"><i class="fas fa-bookmark" ></i></button>
                             </form>
                             @else
                             <form action="{{ route('posts.bookmark', ['post' => $post]) }}" method="POST">
                                 @csrf
                                 @method('POST')
-                                <button type="submit" class="btn btn-link"><i class="far fa-bookmark"></i></button>
+                                <button type="submit" class="btn btn-link" style="margin-top:15px"><i class="far fa-bookmark"></i></button>
                             </form>
                             @endif
                             @endauth
 
                         </div>
-
 
                     </div>
 
@@ -291,7 +149,7 @@ use App\Models\Forum;
         </div>
     </div>
 
-   
+
 
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -301,8 +159,6 @@ use App\Models\Forum;
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script>
-       
-
         function goBack() {
             history.go(-1);
         }
@@ -313,11 +169,101 @@ use App\Models\Forum;
                 $('.comment-input').toggle();
             });
         });
-
-       
     </script>
 
 </body>
-
-</html>
 @endsection
+
+<style>
+        
+
+        .card-header img {
+            object-fit: cover;
+        }
+
+        .card-header h5 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .card-body h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-footer ul li {
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+
+        .go-back-button {
+            background-color: #d1e0ee;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            position: relative;
+        }
+
+        .go-back-button::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-right: 6px solid #333;
+        }
+
+        .go-back-button:hover {
+            background-color: #245697;
+        }
+
+        .go-back-button:hover::before {
+            border-right-color: #555;
+        }
+
+        .comments-section {
+            margin-top: 10px;
+        }
+
+        .comments-section h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .comment {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .profile-picture {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .comment .comment-user {
+            display: flex;
+            align-items: center;
+        }
+
+        .comment .comment-author {
+            font-size: 14px;
+            font-weight: bold;
+            color: #657786;
+            margin-bottom: 5px;
+        }
+
+        .comment .comment-content {
+            margin-bottom: 5px;
+        }
+    </style>

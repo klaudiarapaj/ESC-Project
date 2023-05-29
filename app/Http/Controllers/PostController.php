@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Report;
 
 
 class PostController extends Controller
@@ -89,7 +90,6 @@ class PostController extends Controller
 }
 
 
-
     public function show(Post $post)
     {
 
@@ -101,22 +101,43 @@ class PostController extends Controller
 
     public function deletePost(Post $post)
     {
+       
         $post->delete();
-
         
-        return redirect()->route('profile', ['user' => auth()->user()]);
+        return redirect()->route('profile');
        
     }
+
+    public function report(Post $post)
+{
+    // Create a new report in the reports table
+    Report::create([
+        'post_id' => $post->id,
+        'user_id' => auth()->user()->id, // Assuming you're using authentication
+        // Additional columns if any
+    ]);
+    
+    return redirect()->back()->with('success', 'Post reported successfully!');
+}
 
 
     //for admin
 
-    public function index()
-    {
+    public function showReportedPosts()
+{
+    $posts = Report::with('post')->whereHas('post')->paginate(5);
+  // Assuming the `Report` model has a relationship with the `Post` model
 
-        $posts = Post::paginate(5);
-        return view('post.posts', compact('posts'));
-    }
+    return view('post.posts', compact('posts'));
+}
+
+public function clear($id)
+{
+    Report::where('post_id', $id)->delete();
+
+    return redirect()->back()->with('success', 'Reports cleared for the post.');
+}
+
 
     public function delete(Post $post)
     {

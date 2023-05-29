@@ -13,7 +13,7 @@ class Report extends Model
     protected $fillable = [
         'user_id',
         'post_id',
-        'reason',
+       
     ];
 
     public function post()
