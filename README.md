@@ -26,10 +26,10 @@ Getting Started\
 Installation\
 Usage\
 Contributing\
-License\
+License
 
  ## **Project Description**
-ESC is a social networking website for students where they can connect, share information, participate in discussions etc. It provides a forum for students to interact with each other, exchange ideas, and foster community.\
+ESC is a social networking website for students where they can connect, share information, participate in discussions etc. It provides a forum for students to interact with each other, exchange ideas, and foster community.
 
 The project leverages PHP's power and flexibility to deliver a robust, scalable solution. It incorporates several Laravel packages to streamline development.
 
