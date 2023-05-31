@@ -44,7 +44,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     //comment
     Route::post('/posts/{post}/comment', 'App\Http\Controllers\CommentController@create')->name('comments.create');
-   
+
 
     //search
     Route::get('/search', 'App\Http\Controllers\SearchController@search')->name('search');
@@ -100,7 +100,7 @@ Route::post('/email/verification-notification', [App\Http\Controllers\Auth\Verif
 
 
 Route::group(['middleware' => ['guest']], function () {
-  
+
     //login
     Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
     Route::post('/login', 'Auth\LoginController@login');

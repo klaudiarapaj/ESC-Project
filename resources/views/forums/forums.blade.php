@@ -28,7 +28,7 @@
                             @endphp
                             @foreach ($forums as $forum)
                             <tr>
-                                <th scope="row">{{ ++$forumCount }}</th> <!-- Display forum number -->
+                                <th scope="row">{{ ++$forumCount }}</th> 
                                 <td>{{ $forum->name }}</td>
                                 <td>{{ $forum->description }}</td>
                                 <td><a href="{{ route('forums.edit', $forum->id) }}">Edit</a></td>

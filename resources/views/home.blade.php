@@ -139,8 +139,5 @@ use App\Models\Forum;
         </div>
     </div>
 
-
-      
-
 </body>
 @endsection

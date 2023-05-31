@@ -76,13 +76,11 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'verification_code' => Str::random(40), // Generate verification code
             'email_verified_at' => null // Email not verified yet
         ]);
 
         event(new Registered($user));
-        // Send verification email
-      //  $user->sendEmailVerificationNotification();
+      
         
         return $user;
     }

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
-   // ProfileController.php
+   
 
    public function show()
    {
@@ -25,7 +25,7 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-     //  $user = Auth::user(); // Get the authenticated user
+     
      $user = User::find(auth()->id());
 
 
@@ -41,6 +41,7 @@ class ProfileController extends Controller
         ]);
 
         // Update the user's information with the form data
+        $user->name = $request->input('name');
         $user->department = $request->input('department');
         $user->birthdate = $request->input('birthdate');
         $user->interests = $request->input('interests');

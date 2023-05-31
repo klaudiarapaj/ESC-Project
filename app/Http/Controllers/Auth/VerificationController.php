@@ -59,8 +59,6 @@ class VerificationController extends Controller
 
     protected function redirectPath()
     {
-        // Define the path you want to redirect the user after verification.
-        // For example, you can redirect to the profile page.
         return '/profile';
     }
 }

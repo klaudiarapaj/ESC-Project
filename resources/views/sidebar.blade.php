@@ -10,7 +10,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 60px; /* Adjust the width as needed */
+            width: 60px;
             height: 100vh;
             z-index: 9999;
         }
@@ -36,24 +36,24 @@
         }
 
         .sidebar-expanded {
-            width: 200px; /* Adjust the expanded width as needed */
+            width: 200px;
         }
 
         .forum-list {
             list-style-type: none;
             padding: 0;
             margin: 0;
-            display: none; /* Hide the forum list by default */
-          
+            display: none;
+
             flex-direction: column;
             align-items: center;
-            height: 100vh; /* Set height to 100vh to match the page */
-            justify-content: center; /* Center the text vertically */
+            height: 100vh;
+            justify-content: center;
         }
 
         .forum-list li {
             padding: 10px;
-            text-align: center; /* Center the text horizontally */
+            text-align: center;
         }
 
         .forum-list li a {
@@ -62,21 +62,21 @@
         }
 
         .content {
-            margin-left: 60px; /* Adjust this value to match the width of the expanded sidebar */
+            margin-left: 60px;
             padding: 20px;
         }
 
-        /* Push the content down */
+
         .push-content {
-            margin-left: 60px; /* Adjust this value to match the width of the expanded sidebar */
+            margin-left: 60px;
         }
 
-        /* Adjust the height of the sidebar to match the viewport height */
+
         .sidebar-expanded .forum-list {
             display: block;
         }
 
-        /* Hide the "Forums You Have Joined" section if the sidebar is collapsed */
+
         .sidebar-expanded h2 {
             display: block;
         }
@@ -95,12 +95,12 @@
                 <h2>Forums You Have Joined</h2>
                 <ul class="forum-list" id="forum-list">
                     @foreach ($user->forums as $forum)
-                        <li><a href="{{ route('forums.show', ['name' => $forum->name]) }}">{{ $forum->name }}</a></li>
+                    <li><a href="{{ route('forums.show', ['name' => $forum->name]) }}">{{ $forum->name }}</a></li>
                     @endforeach
                 </ul>
             </div>
         </div>
-       
+
     </div>
 
     <script>

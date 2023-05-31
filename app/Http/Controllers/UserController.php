@@ -46,6 +46,4 @@ class UserController extends Controller
         // Redirect back with success message
         return redirect()->back()->with('success', 'User role updated successfully.');
     }
-
-   
-}    
+}

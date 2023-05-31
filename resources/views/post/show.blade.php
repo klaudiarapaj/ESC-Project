@@ -9,6 +9,7 @@ use App\Models\Forum;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous">
 
 </head>
+
 <body>
     <div class="container">
         <div class="row justify-content-center mb-3">
@@ -95,7 +96,7 @@ use App\Models\Forum;
                             <form action="{{ route('posts.removeBookmark', ['post' => $post]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-link" style="margin-top:15px"><i class="fas fa-bookmark" ></i></button>
+                                <button type="submit" class="btn btn-link" style="margin-top:15px"><i class="fas fa-bookmark"></i></button>
                             </form>
                             @else
                             <form action="{{ route('posts.bookmark', ['post' => $post]) }}" method="POST">
@@ -175,95 +176,93 @@ use App\Models\Forum;
 @endsection
 
 <style>
-        
+    .card-header img {
+        object-fit: cover;
+    }
 
-        .card-header img {
-            object-fit: cover;
-        }
+    .card-header h5 {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 0;
+    }
 
-        .card-header h5 {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 0;
-        }
+    .card-body h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
 
-        .card-body h2 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
+    .card-footer ul li {
+        font-size: 0.9rem;
+        margin-right: 0.5rem;
+    }
 
-        .card-footer ul li {
-            font-size: 0.9rem;
-            margin-right: 0.5rem;
-        }
+    .go-back-button {
+        background-color: #d1e0ee;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        position: relative;
+    }
 
-        .go-back-button {
-            background-color: #d1e0ee;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 16px;
-            position: relative;
-        }
+    .go-back-button::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+        border-right: 6px solid #333;
+    }
 
-        .go-back-button::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 10px;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-top: 6px solid transparent;
-            border-bottom: 6px solid transparent;
-            border-right: 6px solid #333;
-        }
+    .go-back-button:hover {
+        background-color: #245697;
+    }
 
-        .go-back-button:hover {
-            background-color: #245697;
-        }
+    .go-back-button:hover::before {
+        border-right-color: #555;
+    }
 
-        .go-back-button:hover::before {
-            border-right-color: #555;
-        }
+    .comments-section {
+        margin-top: 10px;
+    }
 
-        .comments-section {
-            margin-top: 10px;
-        }
+    .comments-section h3 {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 
-        .comments-section h3 {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    .comment {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: flex-start;
+    }
 
-        .comment {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: flex-start;
-        }
+    .profile-picture {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
 
-        .profile-picture {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
+    .comment .comment-user {
+        display: flex;
+        align-items: center;
+    }
 
-        .comment .comment-user {
-            display: flex;
-            align-items: center;
-        }
+    .comment .comment-author {
+        font-size: 14px;
+        font-weight: bold;
+        color: #657786;
+        margin-bottom: 5px;
+    }
 
-        .comment .comment-author {
-            font-size: 14px;
-            font-weight: bold;
-            color: #657786;
-            margin-bottom: 5px;
-        }
-
-        .comment .comment-content {
-            margin-bottom: 5px;
-        }
-    </style>
+    .comment .comment-content {
+        margin-bottom: 5px;
+    }
+</style>

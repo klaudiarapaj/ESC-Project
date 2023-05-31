@@ -72,22 +72,22 @@ class ForumController extends Controller
 
 
     //for the user
-    
+
 
     public function show($name)
     {
         // Find the forum by name
-    $forum = Forum::where('name', $name)->firstOrFail();
+        $forum = Forum::where('name', $name)->firstOrFail();
 
-    // Get the authenticated user
-    $user = auth()->user();
+        // Get the authenticated user
+        $user = auth()->user();
 
-   
-    // Pass the forum and user to the view
-    return view('forums.show', compact('forum', 'user'));
+
+        // Pass the forum and user to the view
+        return view('forums.show', compact('forum', 'user'));
     }
-    
-    
+
+
 
     /* public function show(Forum $forum)
     {
@@ -101,35 +101,34 @@ class ForumController extends Controller
     {
         // Get the authenticated user
         $user = auth()->user();
-    
+
         // Find the forum by ID
         $forum = Forum::findOrFail($id);
-    
+
         // Check if the user is already a member of the forum
         if ($user->forums->contains($forum)) {
-            // User is already a member, handle it accordingly (e.g., show a message)
+            // User is already a member, handle it accordingly 
             return redirect()->back()->with('message', 'You are already a member of this forum.');
         }
-    
-        // Attach the forum to the user's forums (assuming you have a many-to-many relationship)
+
+        // Attach the forum to the user's forums
         $user->forums()->attach($forum);
-    
+
         // Redirect to the forum page or any other desired location
         return redirect()->back()->with('message', 'You have joined the forum successfully.');
     }
-    
+
 
 
     public function leave(Forum $forum)
     {
         // Get the authenticated user
         $user = auth()->user();
-    
+
         // Detach the user from the forum's members
         $forum->members()->detach($user);
 
-        // Redirect back to the forum or any other appropriate page
+        // Redirect back to the forum 
         return redirect()->route('forums.show', ['name' => $forum->name]);
-        
     }
-}    
+}

@@ -63,23 +63,23 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Post::class, 'likes');
     }
 
-  
+
 
     public function followers()
     {
         return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id');
     }
-    
+
     public function following()
     {
         return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id');
     }
-    
+
     public function isFollowing($userId)
     {
         return $this->following->contains($userId);
     }
-    
+
 
     public function bookmarks()
     {
@@ -87,7 +87,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-    // Define the "forums joined" relationship
+
     public function forums()
     {
         return $this->belongsToMany(Forum::class, 'forum_user', 'user_id', 'forum_id')->withTimestamps();
@@ -95,12 +95,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function feed()
     {
-        // Get the IDs of the users that the current user is following, including their own ID
+
         $followingIds = $this->following()->pluck('users.id')->push($this->id);
 
 
 
-        // Get the IDs of the forums that the current user has joined
+
         $forumIds = $this->forumsJoined()->pluck('forums.id');
 
         // Get the posts from the users that the current user is following, as well as their own posts, and the posts from the forums they have joined
@@ -113,12 +113,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
     public function comments()
-{
-    return $this->hasMany(Comment::class);
-}
+    {
+        return $this->hasMany(Comment::class);
+    }
 
 
-    public function profilefeed(){
+    public function profilefeed()
+    {
         return $this->hasMany(Post::class)->orderByDesc('created_at');
     }
 
@@ -133,19 +134,20 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function isAdmin()
-{
-    return $this->role === 'admin';
-}
+    {
+        return $this->role === 'admin';
+    }
 
-public function notifications()
-{
-    return $this->morphMany(Notification::class, 'notifiable')
-        ->orderBy('created_at', 'desc');
-}
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'notifiable')
+            ->orderBy('created_at', 'desc');
+    }
 
-public function forumsJoined(){
-    return $this->belongsToMany(Forum::class, 'forum_user', 'user_id', 'forum_id')->withTimestamps();
-}
+    public function forumsJoined()
+    {
+        return $this->belongsToMany(Forum::class, 'forum_user', 'user_id', 'forum_id')->withTimestamps();
+    }
 
 
 

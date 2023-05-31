@@ -23,7 +23,7 @@ class FeedbackController extends Controller
     $feedback = new Feedback();
     $feedback->subject = $request->input('subject');
     $feedback->message = $request->input('message');
-    // You can also store the student ID or any other relevant information about the feedback if needed
+    
 
     // Save the feedback to the database
     $feedback->save();
