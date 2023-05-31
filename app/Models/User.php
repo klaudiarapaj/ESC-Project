@@ -11,14 +11,18 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Like;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Forum;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 
 
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory;
-    use Notifiable;
+    use HasFactory, Notifiable;
+    use HasApiTokens;
     use HasRoles;
 
     /**
@@ -38,6 +42,11 @@ class User extends Authenticatable
         'phonenumber',
         'profile_picture',
     ];
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new \App\Notifications\VerifyEmailNotification);
+    }
 
     public function posts()
     {

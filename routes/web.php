@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 
-
+//default
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('home');
@@ -13,14 +13,19 @@ Route::get('/', function () {
     }
 });
 
+
+
 Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    //profile
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
     Route::get('/profile/edit', 'App\Http\Controllers\ProfileController@edit')->name('profile.edit');
     Route::post('/profile/update', 'App\Http\Controllers\ProfileController@update')->name('profile.update');
     Route::post('/users/{user}/follow', 'App\Http\Controllers\UserController@follow')->name('follow');
 
 
+    //posts
     Route::post('/posts', 'App\Http\Controllers\PostController@create')->name('post.create');
     Route::get('/posts/{post}', 'App\Http\Controllers\PostController@show')->name('post.show');
     Route::get('/profile/{user:name}', 'App\Http\Controllers\ProfileController@show')->name('profile.show');
@@ -39,7 +44,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     //comment
     Route::post('/posts/{post}/comment', 'App\Http\Controllers\CommentController@create')->name('comments.create');
-   // Route::post('/comments',  'App\Http\Controllers\CommentController@store')->name('comments.store');
+   
 
     //search
     Route::get('/search', 'App\Http\Controllers\SearchController@search')->name('search');
@@ -70,7 +75,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     //feedback
     Route::get('/feedback', 'App\Http\Controllers\FeedbackController@index')->name('feedback');
     Route::post('/feedback/store', 'App\Http\Controllers\FeedbackController@store')->name('feedback.store');
-    
+
 
 
     Route::post('/post', function () {
@@ -79,7 +84,24 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     });
 });
 
+
+//email verification
+Route::get('/email/verify', [App\Http\Controllers\Auth\VerificationController::class, 'show'])
+    ->middleware(['auth'])
+    ->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', [App\Http\Controllers\Auth\VerificationController::class, 'verify'])
+    ->middleware(['auth', 'signed', 'throttle:6,1'])
+    ->name('verification.verify');
+
+Route::post('/email/verification-notification', [App\Http\Controllers\Auth\VerificationController::class, 'resend'])
+    ->middleware(['auth', 'throttle:6,1'])
+    ->name('verification.resend');
+
+
 Route::group(['middleware' => ['guest']], function () {
+  
+    //login
     Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
     Route::post('/login', 'Auth\LoginController@login');
     Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
@@ -101,7 +123,6 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
     Route::delete('/posts/{post}/delete', 'App\Http\Controllers\PostController@delete')->name('posts.delete');
     Route::get('/feedbacks', 'App\Http\Controllers\FeedbackController@showFeedbacks')->name('admin.feedbacks');
     Route::delete('/feedback/{id}', 'App\Http\Controllers\FeedbackController@destroy')->name('feedback.delete');
-
 });
 
 

@@ -65,7 +65,7 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            'email' => ['required', 'email', 'regex:/@epoka\.edu\.al$/i'],
+        'email' => ['required', 'email' /*, 'regex:/@epoka\.edu\.al$/i' */],
             'password' => ['required', 'string', 'min:8'],
         ]);
     }

@@ -8,6 +8,13 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str; // Generate verification code
+use App\Http\Controllers\Auth\Request;
+use Illuminate\Auth\Events\Registered;
+
+
+
+
 
 class RegisterController extends Controller
 {
@@ -53,6 +60,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex:/@epoka\.edu\.al$/i'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+
         ]);
     }
 
@@ -64,10 +72,26 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'verification_code' => Str::random(40), // Generate verification code
+            'email_verified_at' => null // Email not verified yet
         ]);
+
+        event(new Registered($user));
+        // Send verification email
+      //  $user->sendEmailVerificationNotification();
+        
+        return $user;
     }
+
+    protected function registered($user)
+    {
+        $this->guard()->logout();
+
+        return redirect('/login')->with('success', 'Please check your email to verify your account.');
+    }
+
 }
